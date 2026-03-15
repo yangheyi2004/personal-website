@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  website:
+    build: .
+    container_name: personal-website
+    ports:
+      - "8081:80"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - website-network
+
+networks:
+  website-network:
+    driver: bridge
