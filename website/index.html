@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小牛的个人网页</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">YHY</div>
+            <ul class="nav-menu">
+                <li><a href=" " class="active">首页</a ></li>
+                <li><a href="about.html">关于我</a ></li>
+                <li><a href="projects.html">项目</a ></li>
+                <li><a href="contact.html">联系</a ></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 主页内容 -->
+    <main>
+        <!-- 英雄区域 -->
+        <section class="hero">
+            <div class="container">
+                < img src="./images/touxiang.jpg" alt="头像" class="avatar">
+                <h1>杨和一</h1>
+                <p class="tagline">前端开发 | 网络工程师 | 自动化运维</p >
+                <div class="hero-buttons">
+                    <a href="projects.html" class="btn btn-primary">查看我的项目</a >
+                    <a href="contact.html" class="btn btn-secondary">联系我</a >
+                </div>
+            </div>
+        </section>
+
+        <!-- 技能概览 -->
+        <section class="skills-preview">
+            <div class="container">
+                <h2>核心技术栈</h2>
+                <div class="skills-cloud">
+                    <span class="skill-tag">Docker</span>
+                    <span class="skill-tag">Kubernetes</span>
+                    <span class="skill-tag">Jenkins</span>
+                    <span class="skill-tag">Git</span>
+                    <span class="skill-tag">AWS</span>
+                    <span class="skill-tag">Linux</span>
+                    <span class="skill-tag">Python</span>
+                    <span class="skill-tag">Terraform</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 最新项目 -->
+        <section class="latest-projects">
+            <div class="container">
+                <h2>最新项目</h2>
+                <div class="project-cards" id="latest-projects">
+                    <!-- JavaScript会动态加载 -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 杨和一. All rights reserved.</p >
+            <div class="deploy-info">
+                <p>版本: <span id="version">1.0.0</span></p >
+                <p>部署时间: <span id="deploy-time"></span></p >
+                <p>容器ID: <span id="container-id"></span></p >
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
