@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  website:
+    build:
+      context: .           # 构建上下文是当前目录
+      dockerfile: Dockerfile  # Dockerfile在根目录
+    container_name: personal-website
+    ports:
+      - "8081:80"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - website-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # 如果有需要，可以添加其他服务
+  # 比如nginx反向代理等
+
+networks:
+  website-network:
+    driver: bridge
