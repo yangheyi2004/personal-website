@@ -49,21 +49,20 @@ pipeline {
         stage('测试容器') {
             steps {
                 sh '''
-                    # 运行测试容器
-                    docker run -d --name test-website -p 8080:80 ${DOCKER_IMAGE}:${VERSION}
+                    # 使用 8081 端口，避免与 Jenkins 的 8080 冲突
+                    docker run -d --name test-website -p 8081:80 ${DOCKER_IMAGE}:${VERSION}
                     
-                    # 等待启动
                     sleep 5
                     
                     # 测试访问
                     echo "测试首页访问..."
-                    curl -f http://localhost:8080 || exit 1
+                    curl -f http://localhost:8081 || exit 1
                     
                     echo "测试健康检查..."
-                    curl -f http://localhost:8080/health || exit 1
+                    curl -f http://localhost:8081/health || exit 1
                     
                     echo "测试版本信息..."
-                    curl -f http://localhost:8080/version || exit 1
+                    curl -f http://localhost:8081/version || exit 1
                     
                     # 清理测试容器
                     docker stop test-website
@@ -79,28 +78,26 @@ pipeline {
                     docker stop personal-website || true
                     docker rm personal-website || true
                     
-                    # 启动新容器
+                    # 启动新容器（同样映射到 8081）
                     docker run -d \
                       --name personal-website \
-                      -p 8080:80 \
+                      -p 8081:80 \
                       --restart unless-stopped \
                       ${DOCKER_IMAGE}:${VERSION}
                     
-                    # 等待启动
                     sleep 5
                     
                     # 验证部署
                     echo "验证部署..."
-                    curl -f http://localhost:8080 || exit 1
+                    curl -f http://localhost:8081 || exit 1
                     
-                    echo "✅ 部署成功！访问地址：http://localhost:8080"
+                    echo "✅ 部署成功！访问地址：http://localhost:8081"
                 '''
             }
         }
         
         stage('运行部署脚本') {
             when {
-                // 如果scripts目录下有部署脚本，可以执行
                 expression { fileExists('scripts/deploy.sh') }
             }
             steps {
@@ -114,15 +111,15 @@ pipeline {
     
     post {
         success {
-            echo '🎉 Pipeline执行成功！'
+            echo '🎉 Pipeline 执行成功！'
             echo "镜像版本: ${DOCKER_IMAGE}:${VERSION}"
-            echo "访问地址：http://localhost:8080"
+            echo "访问地址：http://localhost:8081"
             
             // 清理旧镜像（可选）
             sh 'docker image prune -f || true'
         }
         failure {
-            echo '❌ Pipeline执行失败！'
+            echo '❌ Pipeline 执行失败！'
             sh 'docker logs personal-website 2>/dev/null || true'
             sh 'docker logs test-website 2>/dev/null || true'
         }

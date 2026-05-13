@@ -12,11 +12,10 @@ RUN apk add --no-cache curl
 # 复制网站文件到nginx目录（从website/目录复制）
 COPY website/ /usr/share/nginx/html/
 
-# 复制自定义nginx配置（如果docker目录下有nginx配置）
-# 如果有自定义配置，取消下面的注释
-# COPY docker/nginx.conf /etc/nginx/nginx.conf
+# 修复权限，确保 nginx 用户可读（避免 403）
+RUN chmod -R 755 /usr/share/nginx/html
 
-# 创建健康检查端点
+# 复制自定义nginx配置，提供 /health、/version、/container-id 端点
 RUN echo 'server { \
     listen 80; \
     root /usr/share/nginx/html; \
